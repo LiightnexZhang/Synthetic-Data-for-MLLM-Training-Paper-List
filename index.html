@@ -2,360 +2,397 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Synthetic Data for MLLM Training Paper List</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --accent-color: #2c3e50;
-            --table-header-bg: #f8f9fa;
-        }
-
-        body {
-            font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
-            line-height: 1.6;
-        }
-
-        .table-container {
-            min-height: 600px; /* 确保表格页面最小高度 */
-            display: flex;
-            flex-direction: column;
-        }
-
-        .table-responsive {
-            min-height: 600px; /* 确保表格区域的最小高度 */
-        }
-
-        table {
-            table-layout: fixed;
-            width: 100%;
-        }
-
-        table th {
-            background-color: var(--table-header-bg) !important;
-            font-weight: 700;
-            cursor: pointer;
-            padding: 12px;
-            text-align: left;
-            position: relative;
-        }
-
-        /* 设置列宽 */
-        th:nth-child(1), td:nth-child(1) { width: 130px; } /* Date */
-        th:nth-child(2), td:nth-child(2) { width: auto; }  /* Title - 自适应 */
-        th:nth-child(3), td:nth-child(3) { width: 120px; } /* Links */
-        th:nth-child(4), td:nth-child(4) { width: 350px; } /* Type */
-
-        .tag {
-            display: inline-block;
-            padding: 6px 12px;
-            margin: 3px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: normal;
-            border: 2px solid;
-            transition: all 0.3s ease;
-        }
-
-        .dropdown {
-            position: absolute;
-            background: white;
-            border: 1px solid #ccc;
-            padding: 10px;
-            display: none;
-            width: 220px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 1000;
-        }
-
-        .dropdown label {
-            display: block;
-            padding: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .dropdown label:hover {
-            background: #f0f0f0;
-        }
-
-        .table-hover tbody tr:hover {
-            background-color: rgba(44, 62, 80, 0.05);
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synthetic Data for MLLM Training Paper List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --accent-color: #2c3e50;
+      --table-header-bg: #f8f9fa;
+    }
+    body {
+      font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
+      line-height: 1.6;
+    }
+    .table-container {
+      min-height: 600px; /* 确保表格页面最小高度 */
+      display: flex;
+      flex-direction: column;
+    }
+    .table-responsive {
+      min-height: 600px; /* 确保表格区域最小高度 */
+    }
+    table {
+      table-layout: fixed;
+      width: 100%;
+    }
+    table th {
+      background-color: var(--table-header-bg) !important;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 12px;
+      text-align: left;
+      position: relative;
+    }
+    /* 设置列宽 */
+    th:nth-child(1), td:nth-child(1) { width: 130px; } /* Date */
+    th:nth-child(2), td:nth-child(2) { width: auto; }  /* Title - 自适应 */
+    th:nth-child(3), td:nth-child(3) { width: 120px; } /* Links */
+    th:nth-child(4), td:nth-child(4) { width: 350px; } /* Type */
+    .tag {
+      display: inline-block;
+      padding: 6px 12px;
+      margin: 3px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: normal;
+      border: 2px solid;
+      transition: all 0.3s ease;
+    }
+    /* 下拉框部分 */
+    .dropdown {
+      position: absolute;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      display: none;
+      width: 220px;
+      z-index: 1000;
+    }
+    /* 固定显示 OR/AND 部分 */
+    #filterMode {
+      position: sticky;
+      top: 0;
+      background: white;
+      padding-bottom: 5px;
+      z-index: 1010;
+    }
+    #filterMode label {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    /* 复选框区域，设置最大高度和滚动条 */
+    #checkboxContainer {
+      max-height: 150px;
+      overflow-y: auto;
+      margin-top: 5px;
+    }
+    .dropdown label {
+      display: block;
+      padding: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .dropdown label:hover {
+      background: #f0f0f0;
+    }
+    .table-hover tbody tr:hover {
+      background-color: rgba(44, 62, 80, 0.05);
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+  </style>
 </head>
 <body class="bg-light">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="#">
-            <i class="bi bi-journal-richtext me-2"></i>Synthetic Data for MLLM Training Paper List (Updating...)
-        </a>
+      <a class="navbar-brand" href="#">
+        <i class="bi bi-journal-richtext me-2"></i>Synthetic Data for MLLM Training Paper List (Updating...)
+      </a>
     </div>
-</nav>
-
-<div class="container py-5">
+  </nav>
+  <div class="container py-5">
     <div class="table-container">
-        <div class="card shadow-lg">
-            <div class="card-header bg-white">
-                <h2 class="mb-0">Survey Prep: Synthetic Data for MLLM Training (2025-2023)</h2>
-                <p class="text-muted mt-2">Last updated: February 2025 | 20 Papers Analyzed</p>
-            </div>
-
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table align-middle" id="sortable-table">
-                        <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Title</th>
-                            <th>Links</th>
-                            <th id="typeHeader">Type ⏷
-                                <div class="dropdown" id="typeDropdown">
-<label><input type="checkbox" value="survey" onchange="filterByType()"> survey</label><label><input type="checkbox" value="医学" onchange="filterByType()"> 医学</label><label><input type="checkbox" value="合成数据数据集" onchange="filterByType()"> 合成数据数据集</label><label><input type="checkbox" value="合成数据生成管道" onchange="filterByType()"> 合成数据生成管道</label><label><input type="checkbox" value="图片" onchange="filterByType()"> 图片</label><label><input type="checkbox" value="多学科数据集" onchange="filterByType()"> 多学科数据集</label><label><input type="checkbox" value="对比学习" onchange="filterByType()"> 对比学习</label><label><input type="checkbox" value="数学" onchange="filterByType()"> 数学</label><label><input type="checkbox" value="文字" onchange="filterByType()"> 文字</label>
-                                </div>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-
-                        <tr data-tags="">
-                            <td>24 Sep 2024</td>
-                            <td>
-                                <div class="fw-bold">Scaling Synthetic Data Creation with 1,000,000,000 Personas</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2406.20094" class="text-decoration-none">Paper ↗</a><br><a href="https://github.com/tencent-ailab/persona-hub" class="text-decoration-none">Code ↗</a></td>
-                            <td></td>
-                        </tr>
-    
-                        <tr data-tags="">
-                            <td>5 Mar 202</td>
-                            <td>
-                                <div class="fw-bold">VILA: On Pre-training for Visual Language Models</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2412.04468" class="text-decoration-none">Paper ↗</a><br><a href="https://github.com/NVlabs/VILA" class="text-decoration-none">Code ↗</a></td>
-                            <td></td>
-                        </tr>
-    
-                        <tr data-tags="">
-                            <td>12 Feb 2025</td>
-                            <td>
-                                <div class="fw-bold">mmE5: Improving Multimodal Multilingual Embeddings via
-High-quality Synthetic Data</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2502.08468" class="text-decoration-none">Paper ↗</a><br><a href="https://arxiv.org/pdf/2502.08468
-https://github.com/haon-chen/mmE5" class="text-decoration-none">Code ↗</a></td>
-                            <td></td>
-                        </tr>
-    
-                        <tr data-tags="">
-                            <td>13 Oct 2024</td>
-                            <td>
-                                <div class="fw-bold">LOKI: A Comprehensive Synthetic Data Detection Benchmark using Large Multimodal Models</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2410.09732" class="text-decoration-none">Paper ↗</a><br><a href="https://opendatalab.github.io/LOKI/" class="text-decoration-none">Code ↗</a></td>
-                            <td></td>
-                        </tr>
-    
-                        <tr data-tags="">
-                            <td>29 Sep 2024</td>
-                            <td>
-                                <div class="fw-bold">Multimodal Misinformation Detection by Learning from Synthetic Data with Multimodal LLMs</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2409.19656" class="text-decoration-none">Paper ↗</a><br><a href="https://github.com/znhy1024/MLLMs-for-MMD已失效" class="text-decoration-none">Code ↗</a></td>
-                            <td></td>
-                        </tr>
-    
-                        <tr data-tags="">
-                            <td>24 Oct 2024</td>
-                            <td>
-                                <div class="fw-bold">Infinity-MM: Scaling Multimodal Performance with Large-Scale and High-Quality Instruction Data</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2410.18558" class="text-decoration-none">Paper ↗</a></td>
-                            <td></td>
-                        </tr>
-    
-                        <tr data-tags="">
-                            <td>22 Aug 2024</td>
-                            <td>
-                                <div class="fw-bold">Building and better understanding vision-language models: insights and future directions</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2408.12637" class="text-decoration-none">Paper ↗</a><br><a href="https://huggingface.co/HuggingFaceM4/Idefics3-8B-Llama3" class="text-decoration-none">Code ↗</a></td>
-                            <td></td>
-                        </tr>
-    
-                        <tr data-tags="">
-                            <td>24 Jul 2024</td>
-                            <td>
-                                <div class="fw-bold">EAFormer: Scene Text Segmentation with Edge-Aware Transformers</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2407.17020" class="text-decoration-none">Paper ↗</a><br><a href="https://hyangyu.github.io/EAFormer/" class="text-decoration-none">Code ↗</a></td>
-                            <td></td>
-                        </tr>
-    
-                        <tr data-tags="">
-                            <td>2311.03054</td>
-                            <td>
-                                <div class="fw-bold">ANYTEXT: MULTILINGUAL VISUAL TEXT GENERATION AND EDITING</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="nan" class="text-decoration-none">Paper ↗</a></td>
-                            <td></td>
-                        </tr>
-    
-                        <tr data-tags="合成数据生成管道">
-                            <td>7 Jan 2025</td>
-                            <td>
-                                <div class="fw-bold">SMIR: EFFICIENT SYNTHETIC DATA PIPELINE TO IMPROVE MULTI-IMAGE REASONING</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2501.03675" class="text-decoration-none">Paper ↗</a></td>
-                            <td><span class="tag" style="border-color: #e57373; background-color: #e5737333;">合成数据生成管道</span> </td>
-                        </tr>
-    
-                        <tr data-tags="合成数据数据集|对比学习|数学">
-                            <td>10 Dec 2024</td>
-                            <td>
-                                <div class="fw-bold">RL on Incorrect Synthetic Data Scales the Efficiency of LLM Math Reasoning by Eight-Fold</div>
-                                <div class="article-meta">NeurIPS</div>
-                            </td>
-                            <td><a href="https://proceedings.neurips.cc/paper_files/paper/2024/file/4b77d5b896c321a29277524a98a50215-Paper-Conference.pdf" class="text-decoration-none">Paper ↗</a></td>
-                            <td><span class="tag" style="border-color: #64b5f6; background-color: #64b5f633;">合成数据数据集</span> <span class="tag" style="border-color: #81c784; background-color: #81c78433;">对比学习</span> <span class="tag" style="border-color: #ffb74d; background-color: #ffb74d33;">数学</span> </td>
-                        </tr>
-    
-                        <tr data-tags="合成数据生成管道|文字">
-                            <td>11 Oct 2023</td>
-                            <td>
-                                <div class="fw-bold">Synthetic Data Generation with Large Language Models for Text
-Classification: Potential and Limitations</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2310.07849" class="text-decoration-none">Paper ↗</a></td>
-                            <td><span class="tag" style="border-color: #e57373; background-color: #e5737333;">合成数据生成管道</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
-                        </tr>
-    
-                        <tr data-tags="医学|合成数据生成管道|文字">
-                            <td>8 Mar 2023</td>
-                            <td>
-                                <div class="fw-bold">Does Synthetic Data Generation of LLMs Help Clinical Text Mining?</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2303.04360" class="text-decoration-none">Paper ↗</a></td>
-                            <td><span class="tag" style="border-color: #4db6ac; background-color: #4db6ac33;">医学</span> <span class="tag" style="border-color: #e57373; background-color: #e5737333;">合成数据生成管道</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
-                        </tr>
-    
-                        <tr data-tags="合成数据生成管道|文字">
-                            <td>16 Feb 2024</td>
-                            <td>
-                                <div class="fw-bold">DataDreamer: A Tool for Synthetic Data Generation and Reproducible LLM Workflows</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2402.10379" class="text-decoration-none">Paper ↗</a></td>
-                            <td><span class="tag" style="border-color: #e57373; background-color: #e5737333;">合成数据生成管道</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
-                        </tr>
-    
-                        <tr data-tags="合成数据生成管道|文字">
-                            <td>3 Mar 2025</td>
-                            <td>
-                                <div class="fw-bold">CROWDSELECT: Synthetic Instruction Data Selection with Multi-LLM Wisdom</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2503.01836" class="text-decoration-none">Paper ↗</a></td>
-                            <td><span class="tag" style="border-color: #e57373; background-color: #e5737333;">合成数据生成管道</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
-                        </tr>
-    
-                        <tr data-tags="合成数据生成管道|图片|对比学习|文字">
-                            <td>27 Feb 2025</td>
-                            <td>
-                                <div class="fw-bold">New Dataset and Methods for Fine-Grained Compositional Referring Expression Comprehension via Specialist-MLLM Collaboration</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2502.20104" class="text-decoration-none">Paper ↗</a></td>
-                            <td><span class="tag" style="border-color: #e57373; background-color: #e5737333;">合成数据生成管道</span> <span class="tag" style="border-color: #f06292; background-color: #f0629233;">图片</span> <span class="tag" style="border-color: #81c784; background-color: #81c78433;">对比学习</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
-                        </tr>
-    
-                        <tr data-tags="合成数据数据集|图片|多学科数据集|文字">
-                            <td>9 Mar 2025</td>
-                            <td>
-                                <div class="fw-bold">ProJudge: A Multi-Modal Multi-Discipline Benchmark and Instruction-Tuning Dataset for MLLM-based Process Judges</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2503.06553" class="text-decoration-none">Paper ↗</a></td>
-                            <td><span class="tag" style="border-color: #64b5f6; background-color: #64b5f633;">合成数据数据集</span> <span class="tag" style="border-color: #f06292; background-color: #f0629233;">图片</span> <span class="tag" style="border-color: #7986cb; background-color: #7986cb33;">多学科数据集</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
-                        </tr>
-    
-                        <tr data-tags="survey">
-                            <td>7 Feb 2025</td>
-                            <td>
-                                <div class="fw-bold">Survey on AI-Generated Media Detection: From Non-MLLM to MLLM</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2502.05240" class="text-decoration-none">Paper ↗</a></td>
-                            <td><span class="tag" style="border-color: #e0572c; background-color: #e0572c33;">survey</span> </td>
-                        </tr>
-    
-                        <tr data-tags="survey">
-                            <td>29 Jan 2025</td>
-                            <td>
-                                <div class="fw-bold">Image, Text, and Speech Data Augmentation using Multimodal LLMs for Deep Learning: A Survey</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2501.18648" class="text-decoration-none">Paper ↗</a></td>
-                            <td><span class="tag" style="border-color: #e0572c; background-color: #e0572c33;">survey</span> </td>
-                        </tr>
-    
-                        <tr data-tags="合成数据数据集|文字">
-                            <td>2 Oct 2023</td>
-                            <td>
-                                <div class="fw-bold">MAKING RETRIEVAL-AUGMENTED LANGUAGE MODELS ROBUST TO IRRELEVANT CONTEXT</div>
-                                <div class="article-meta">arXiv</div>
-                            </td>
-                            <td><a href="https://arxiv.org/abs/2310.01558" class="text-decoration-none">Paper ↗</a></td>
-                            <td><span class="tag" style="border-color: #64b5f6; background-color: #64b5f633;">合成数据数据集</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
-                        </tr>
-    
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+      <div class="card shadow-lg">
+        <div class="card-header bg-white">
+          <h2 class="mb-0">Survey Prep: Synthetic Data for MLLM Training (2025-2023)</h2>
+          <p class="text-muted mt-2">Last updated: February 2025 | 20 Papers Analyzed</p>
         </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table align-middle" id="sortable-table">
+              <thead>
+                <tr>
+                  <th onclick="sortTable(0)">Date</th>
+                  <th onclick="sortTable(1)">Title</th>
+                  <th onclick="sortTable(2)">Links</th>
+                  <th id="typeHeader">Type ⏷
+                    <div class="dropdown" id="typeDropdown">
+                      <div id="filterMode">
+                        <label>
+                          <input type="radio" name="filterMode" value="or" checked onchange="filterByType()"> OR
+                        </label>
+                        <label>
+                          <input type="radio" name="filterMode" value="and" onchange="filterByType()"> AND
+                        </label>
+                      </div>
+                      <div id="checkboxContainer">
+<label><input type="checkbox" value="survey" onchange="filterByType()"> survey</label><label><input type="checkbox" value="医学" onchange="filterByType()"> 医学</label><label><input type="checkbox" value="合成数据数据集" onchange="filterByType()"> 合成数据数据集</label><label><input type="checkbox" value="合成数据生成管道" onchange="filterByType()"> 合成数据生成管道</label><label><input type="checkbox" value="图片" onchange="filterByType()"> 图片</label><label><input type="checkbox" value="多学科数据集" onchange="filterByType()"> 多学科数据集</label><label><input type="checkbox" value="对比学习" onchange="filterByType()"> 对比学习</label><label><input type="checkbox" value="数学" onchange="filterByType()"> 数学</label><label><input type="checkbox" value="文字" onchange="filterByType()"> 文字</label>
+                      </div>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-tags="">
+                  <td>24 Sep 2024</td>
+                  <td>
+                    <div class="fw-bold">Scaling Synthetic Data Creation with 1,000,000,000 Personas</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2406.20094" class="text-decoration-none">Paper ↗</a><br><a href="https://github.com/tencent-ailab/persona-hub" class="text-decoration-none">Code ↗</a></td>
+                  <td></td>
+                </tr>
+    
+                <tr data-tags="">
+                  <td>5 Mar 202</td>
+                  <td>
+                    <div class="fw-bold">VILA: On Pre-training for Visual Language Models</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2412.04468" class="text-decoration-none">Paper ↗</a><br><a href="https://github.com/NVlabs/VILA" class="text-decoration-none">Code ↗</a></td>
+                  <td></td>
+                </tr>
+    
+                <tr data-tags="">
+                  <td>12 Feb 2025</td>
+                  <td>
+                    <div class="fw-bold">mmE5: Improving Multimodal Multilingual Embeddings via
+High-quality Synthetic Data</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2502.08468" class="text-decoration-none">Paper ↗</a><br><a href="https://arxiv.org/pdf/2502.08468
+https://github.com/haon-chen/mmE5" class="text-decoration-none">Code ↗</a></td>
+                  <td></td>
+                </tr>
+    
+                <tr data-tags="">
+                  <td>13 Oct 2024</td>
+                  <td>
+                    <div class="fw-bold">LOKI: A Comprehensive Synthetic Data Detection Benchmark using Large Multimodal Models</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2410.09732" class="text-decoration-none">Paper ↗</a><br><a href="https://opendatalab.github.io/LOKI/" class="text-decoration-none">Code ↗</a></td>
+                  <td></td>
+                </tr>
+    
+                <tr data-tags="">
+                  <td>29 Sep 2024</td>
+                  <td>
+                    <div class="fw-bold">Multimodal Misinformation Detection by Learning from Synthetic Data with Multimodal LLMs</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2409.19656" class="text-decoration-none">Paper ↗</a><br><a href="https://github.com/znhy1024/MLLMs-for-MMD已失效" class="text-decoration-none">Code ↗</a></td>
+                  <td></td>
+                </tr>
+    
+                <tr data-tags="">
+                  <td>24 Oct 2024</td>
+                  <td>
+                    <div class="fw-bold">Infinity-MM: Scaling Multimodal Performance with Large-Scale and High-Quality Instruction Data</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2410.18558" class="text-decoration-none">Paper ↗</a></td>
+                  <td></td>
+                </tr>
+    
+                <tr data-tags="">
+                  <td>22 Aug 2024</td>
+                  <td>
+                    <div class="fw-bold">Building and better understanding vision-language models: insights and future directions</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2408.12637" class="text-decoration-none">Paper ↗</a><br><a href="https://huggingface.co/HuggingFaceM4/Idefics3-8B-Llama3" class="text-decoration-none">Code ↗</a></td>
+                  <td></td>
+                </tr>
+    
+                <tr data-tags="">
+                  <td>24 Jul 2024</td>
+                  <td>
+                    <div class="fw-bold">EAFormer: Scene Text Segmentation with Edge-Aware Transformers</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2407.17020" class="text-decoration-none">Paper ↗</a><br><a href="https://hyangyu.github.io/EAFormer/" class="text-decoration-none">Code ↗</a></td>
+                  <td></td>
+                </tr>
+    
+                <tr data-tags="">
+                  <td>2311.03054</td>
+                  <td>
+                    <div class="fw-bold">ANYTEXT: MULTILINGUAL VISUAL TEXT GENERATION AND EDITING</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="nan" class="text-decoration-none">Paper ↗</a></td>
+                  <td></td>
+                </tr>
+    
+                <tr data-tags="合成数据生成管道">
+                  <td>7 Jan 2025</td>
+                  <td>
+                    <div class="fw-bold">SMIR: EFFICIENT SYNTHETIC DATA PIPELINE TO IMPROVE MULTI-IMAGE REASONING</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2501.03675" class="text-decoration-none">Paper ↗</a></td>
+                  <td><span class="tag" style="border-color: #e57373; background-color: #e5737333;">合成数据生成管道</span> </td>
+                </tr>
+    
+                <tr data-tags="合成数据数据集|对比学习|数学">
+                  <td>10 Dec 2024</td>
+                  <td>
+                    <div class="fw-bold">RL on Incorrect Synthetic Data Scales the Efficiency of LLM Math Reasoning by Eight-Fold</div>
+                    <div class="article-meta">NeurIPS</div>
+                  </td>
+                  <td><a href="https://proceedings.neurips.cc/paper_files/paper/2024/file/4b77d5b896c321a29277524a98a50215-Paper-Conference.pdf" class="text-decoration-none">Paper ↗</a></td>
+                  <td><span class="tag" style="border-color: #64b5f6; background-color: #64b5f633;">合成数据数据集</span> <span class="tag" style="border-color: #81c784; background-color: #81c78433;">对比学习</span> <span class="tag" style="border-color: #ffb74d; background-color: #ffb74d33;">数学</span> </td>
+                </tr>
+    
+                <tr data-tags="合成数据生成管道|文字">
+                  <td>11 Oct 2023</td>
+                  <td>
+                    <div class="fw-bold">Synthetic Data Generation with Large Language Models for Text
+Classification: Potential and Limitations</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2310.07849" class="text-decoration-none">Paper ↗</a></td>
+                  <td><span class="tag" style="border-color: #e57373; background-color: #e5737333;">合成数据生成管道</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
+                </tr>
+    
+                <tr data-tags="医学|合成数据生成管道|文字">
+                  <td>8 Mar 2023</td>
+                  <td>
+                    <div class="fw-bold">Does Synthetic Data Generation of LLMs Help Clinical Text Mining?</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2303.04360" class="text-decoration-none">Paper ↗</a></td>
+                  <td><span class="tag" style="border-color: #4db6ac; background-color: #4db6ac33;">医学</span> <span class="tag" style="border-color: #e57373; background-color: #e5737333;">合成数据生成管道</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
+                </tr>
+    
+                <tr data-tags="合成数据生成管道|文字">
+                  <td>16 Feb 2024</td>
+                  <td>
+                    <div class="fw-bold">DataDreamer: A Tool for Synthetic Data Generation and Reproducible LLM Workflows</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2402.10379" class="text-decoration-none">Paper ↗</a></td>
+                  <td><span class="tag" style="border-color: #e57373; background-color: #e5737333;">合成数据生成管道</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
+                </tr>
+    
+                <tr data-tags="合成数据生成管道|文字">
+                  <td>3 Mar 2025</td>
+                  <td>
+                    <div class="fw-bold">CROWDSELECT: Synthetic Instruction Data Selection with Multi-LLM Wisdom</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2503.01836" class="text-decoration-none">Paper ↗</a></td>
+                  <td><span class="tag" style="border-color: #e57373; background-color: #e5737333;">合成数据生成管道</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
+                </tr>
+    
+                <tr data-tags="合成数据生成管道|图片|对比学习|文字">
+                  <td>27 Feb 2025</td>
+                  <td>
+                    <div class="fw-bold">New Dataset and Methods for Fine-Grained Compositional Referring Expression Comprehension via Specialist-MLLM Collaboration</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2502.20104" class="text-decoration-none">Paper ↗</a></td>
+                  <td><span class="tag" style="border-color: #e57373; background-color: #e5737333;">合成数据生成管道</span> <span class="tag" style="border-color: #f06292; background-color: #f0629233;">图片</span> <span class="tag" style="border-color: #81c784; background-color: #81c78433;">对比学习</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
+                </tr>
+    
+                <tr data-tags="合成数据数据集|图片|多学科数据集|文字">
+                  <td>9 Mar 2025</td>
+                  <td>
+                    <div class="fw-bold">ProJudge: A Multi-Modal Multi-Discipline Benchmark and Instruction-Tuning Dataset for MLLM-based Process Judges</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2503.06553" class="text-decoration-none">Paper ↗</a></td>
+                  <td><span class="tag" style="border-color: #64b5f6; background-color: #64b5f633;">合成数据数据集</span> <span class="tag" style="border-color: #f06292; background-color: #f0629233;">图片</span> <span class="tag" style="border-color: #7986cb; background-color: #7986cb33;">多学科数据集</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
+                </tr>
+    
+                <tr data-tags="survey">
+                  <td>7 Feb 2025</td>
+                  <td>
+                    <div class="fw-bold">Survey on AI-Generated Media Detection: From Non-MLLM to MLLM</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2502.05240" class="text-decoration-none">Paper ↗</a></td>
+                  <td><span class="tag" style="border-color: #acfe9c; background-color: #acfe9c33;">survey</span> </td>
+                </tr>
+    
+                <tr data-tags="survey">
+                  <td>29 Jan 2025</td>
+                  <td>
+                    <div class="fw-bold">Image, Text, and Speech Data Augmentation using Multimodal LLMs for Deep Learning: A Survey</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2501.18648" class="text-decoration-none">Paper ↗</a></td>
+                  <td><span class="tag" style="border-color: #acfe9c; background-color: #acfe9c33;">survey</span> </td>
+                </tr>
+    
+                <tr data-tags="合成数据数据集|文字">
+                  <td>2 Oct 2023</td>
+                  <td>
+                    <div class="fw-bold">MAKING RETRIEVAL-AUGMENTED LANGUAGE MODELS ROBUST TO IRRELEVANT CONTEXT</div>
+                    <div class="article-meta">arXiv</div>
+                  </td>
+                  <td><a href="https://arxiv.org/abs/2310.01558" class="text-decoration-none">Paper ↗</a></td>
+                  <td><span class="tag" style="border-color: #64b5f6; background-color: #64b5f633;">合成数据数据集</span> <span class="tag" style="border-color: #ba68c8; background-color: #ba68c833;">文字</span> </td>
+                </tr>
+    
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
-
-<script>
-    document.getElementById("typeHeader").addEventListener("click", function(event) {
-        event.stopPropagation();
-        let dropdown = document.getElementById("typeDropdown");
-        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-    });
-
-    document.addEventListener("click", function(event) {
-        let dropdown = document.getElementById("typeDropdown");
-        if (!event.target.closest("#typeHeader")) {
-            dropdown.style.display = "none";
-        }
-    });
-
-    function filterByType() {
-        let selectedTags = Array.from(document.querySelectorAll("#typeDropdown input:checked"))
-                               .map(cb => cb.value);
-        document.querySelectorAll("#sortable-table tbody tr").forEach(row => {
-            let rowTags = row.getAttribute("data-tags").split("|");
-            row.style.display = selectedTags.length === 0 || selectedTags.some(tag => rowTags.includes(tag)) ? "" : "none";
-        });
+  </div>
+  <script>
+    // 排序函数：仅对前3列排序
+    function sortTable(columnIndex) {
+      if (columnIndex === 3) return; // Type 列不排序
+      var table = document.getElementById("sortable-table");
+      var tbody = table.querySelector("tbody");
+      var rows = Array.from(tbody.rows);
+      var ascending = table.getAttribute("data-sort-dir") !== "asc";
+      rows.sort(function(rowA, rowB) {
+        return ascending ? rowA.cells[columnIndex].textContent.localeCompare(rowB.cells[columnIndex].textContent)
+                         : rowB.cells[columnIndex].textContent.localeCompare(rowA.cells[columnIndex].textContent);
+      });
+      rows.forEach(row => tbody.appendChild(row));
+      table.setAttribute("data-sort-dir", ascending ? "asc" : "desc");
     }
-</script>
 
+    // 筛选函数，支持 OR 与 AND 模式
+    function filterByType() {
+      let selectedTags = Array.from(document.querySelectorAll("#typeDropdown input[type='checkbox']:checked"))
+                              .map(cb => cb.value);
+      let filterMode = document.querySelector("input[name='filterMode']:checked").value;
+      document.querySelectorAll("#sortable-table tbody tr").forEach(row => {
+        let rowTags = row.getAttribute("data-tags").split("|").map(tag => tag.trim());
+        if (selectedTags.length === 0) {
+          row.style.display = "";
+        } else if (filterMode === "or") {
+          row.style.display = selectedTags.some(tag => rowTags.includes(tag)) ? "" : "none";
+        } else if (filterMode === "and") {
+          row.style.display = selectedTags.every(tag => rowTags.includes(tag)) ? "" : "none";
+        }
+      });
+    }
+
+    // 点击 Type 表头显示/隐藏下拉框
+    document.getElementById("typeHeader").addEventListener("click", function(event) {
+      event.stopPropagation();
+      let dropdown = document.getElementById("typeDropdown");
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    });
+
+    // 点击页面其他地方关闭下拉框
+    document.addEventListener("click", function(event) {
+      let dropdown = document.getElementById("typeDropdown");
+      if (!event.target.closest("#typeHeader")) {
+        dropdown.style.display = "none";
+      }
+    });
+  </script>
 </body>
 </html>
